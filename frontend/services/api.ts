@@ -14,7 +14,7 @@ export async function loginUser(email: any, password: any) {
 }
 
 // Register user
-export async function registerUser(name: any, email: any, password: any) {
+export async function registerUser(name: string, email: string, password: string) {
   const response = await fetch(API_URL + "register", {
     method: "POST",
     headers: {
@@ -137,6 +137,70 @@ export async function createCategory(
 // Delete category
 export async function deleteCategory(id: number, token: string) {
   const response = await fetch(API_URL + `categories/delete&id=${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.json();
+}
+
+
+
+// Get all budgets for one user
+export async function getBudgets(userId: number, token: string) {
+  const response = await fetch(API_URL + `budgets&user_id=${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.json();
+}
+
+// Create new budget
+export async function createBudget(
+  budget: {
+    name: string;
+    type: string;
+    period: string;
+    limit_amount: number;
+    start_date: string | null;
+    end_date: string | null;
+    user_id: number;
+  },
+  token: string
+) {
+  const response = await fetch(API_URL + "budgets/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(budget),
+  });
+
+  return response.json();
+}
+
+// Delete budget
+export async function deleteBudget(id: number, token: string) {
+  const response = await fetch(API_URL + `budgets/delete&id=${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.json();
+}
+
+
+// Get alerts for one user
+export async function getAlerts(userId: number, token: string) {
+  const response = await fetch(API_URL + `alerts&user_id=${userId}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

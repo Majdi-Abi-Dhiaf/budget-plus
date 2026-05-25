@@ -6,22 +6,69 @@ require_once __DIR__ . "/../models/UserSession.php";
 
 class AuthController {
 
-    public function register() {
-        $data = json_decode(file_get_contents("php://input"), true);
+    // Register user
+public function register() {
 
-        if (!isset($data["name"], $data["email"], $data["password"])) {
-            echo json_encode(["message" => "All fields are required"]);
-            return;
-        }
+    // Get JSON data from request
+    $data = json_decode(file_get_contents("php://input"), true);
 
-        $user = new User();
-
-        if ($user->create($data["name"], $data["email"], $data["password"])) {
-            echo json_encode(["message" => "User registered successfully"]);
-        } else {
-            echo json_encode(["message" => "Registration failed"]);
-        }
+    // Check required fields
+    if (!isset($data["name"], $data["email"], $data["password"])) {
+        echo json_encode([
+            "message" => "All fields are required"
+        ]);
+        return;
     }
+
+    // Create User model
+    $user = new User();
+
+    // Create account
+    if ($user->create($data["name"], $data["email"], $data["password"])) {
+
+        // Get created user by email
+        $createdUser = $user->findByEmail($data["email"]);
+
+        // Token expiration: 24 hours
+        $expiration = time() + (24 * 60 * 60);
+
+        // Create JWT payload
+        $payload = [
+            "user_id" => $createdUser["id"],
+            "email" => $createdUser["email"],
+            "role" => $createdUser["role"],
+            "exp" => $expiration
+        ];
+
+        // Generate token
+        $token = JwtHelper::generateToken($payload);
+
+        // Save session in database
+        $session = new UserSession();
+        $session->create(
+            $createdUser["id"],
+            $token,
+            date("Y-m-d H:i:s", $expiration)
+        );
+
+        // Return token and user data
+        echo json_encode([
+            "message" => "User registered successfully",
+            "token" => $token,
+            "user" => [
+                "id" => $createdUser["id"],
+                "name" => $createdUser["name"],
+                "email" => $createdUser["email"],
+                "role" => $createdUser["role"]
+            ]
+        ]);
+
+    } else {
+        echo json_encode([
+            "message" => "Registration failed"
+        ]);
+    }
+}
 
 
         // User login

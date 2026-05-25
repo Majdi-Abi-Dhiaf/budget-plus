@@ -1,5 +1,5 @@
 "use client";
-
+import Sidebar from "../../components/Sidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -108,22 +108,7 @@ export default function CategoriesPage() {
   return (
     <div className="container-fluid">
       <div className="row">
-        <aside className="col-md-3 col-lg-2 sidebar p-4">
-          <h4 className="mb-4">Budget+</h4>
-
-          <a className="sidebar-link" href="/dashboard">
-            Dashboard
-          </a>
-          <a className="sidebar-link" href="/transactions">
-            Transactions
-          </a>
-          <a className="sidebar-link" href="/budgets">
-            Budgets
-          </a>
-          <a className="sidebar-link" href="/categories">
-            Categories
-          </a>
-        </aside>
+        <Sidebar />
 
         <main className="col-md-9 col-lg-10 p-4">
           <div className="mb-4">

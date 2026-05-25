@@ -1,5 +1,5 @@
 "use client";
-
+import Sidebar from "../../components/Sidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -7,6 +7,7 @@ import {
     createTransaction,
     deleteTransaction,
     getCategories,
+    getBudgets,
 } from "../../services/api";
 
 type User = {
@@ -32,6 +33,16 @@ type Transaction = {
     category_name?: string;
     budget_name?: string;
 };
+type Budget = {
+    id: number;
+    name: string;
+    type: string;
+    period: string;
+    limit_amount: number | string;
+    start_date: string | null;
+    end_date: string | null;
+    user_id: number;
+};
 
 export default function TransactionsPage() {
     const router = useRouter();
@@ -49,6 +60,7 @@ export default function TransactionsPage() {
     const [budgetId, setBudgetId] = useState<string>("");
 
     const [message, setMessage] = useState<string>("");
+    const [budgets, setBudgets] = useState<Budget[]>([]);
 
     useEffect(() => {
         const savedToken = localStorage.getItem("token");
@@ -66,6 +78,7 @@ export default function TransactionsPage() {
 
         loadTransactions(savedUser.id, savedToken);
         loadCategories(savedUser.id, savedToken);
+        loadBudgets(savedUser.id, savedToken);
     }, [router]);
 
     async function loadTransactions(userId: number, userToken: string) {
@@ -80,6 +93,13 @@ export default function TransactionsPage() {
 
         if (data.categories) {
             setCategories(data.categories);
+        }
+    }
+    async function loadBudgets(userId: number, userToken: string) {
+        const data = await getBudgets(userId, userToken);
+
+        if (data.budgets) {
+            setBudgets(data.budgets);
         }
     }
 
@@ -139,22 +159,7 @@ export default function TransactionsPage() {
     return (
         <div className="container-fluid">
             <div className="row">
-                <aside className="col-md-3 col-lg-2 sidebar p-4">
-                    <h4 className="mb-4">Budget+</h4>
-
-                    <a className="sidebar-link" href="/dashboard">
-                        Dashboard
-                    </a>
-                    <a className="sidebar-link" href="/transactions">
-                        Transactions
-                    </a>
-                    <a className="sidebar-link" href="/budgets">
-                        Budgets
-                    </a>
-                    <a className="sidebar-link" href="/categories">
-                        Categories
-                    </a>
-                </aside>
+                <Sidebar />
 
                 <main className="col-md-9 col-lg-10 p-4">
                     <div className="mb-4">
@@ -239,14 +244,20 @@ export default function TransactionsPage() {
                                 </div>
 
                                 <div className="col-md-3">
-                                    <label className="form-label">Budget ID</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        placeholder="Example: 1"
+                                    <label className="form-label">Budget</label>
+                                    <select
+                                        className="form-select"
                                         value={budgetId}
                                         onChange={(e) => setBudgetId(e.target.value)}
-                                    />
+                                    >
+                                        <option value="">Select budget</option>
+
+                                        {budgets.map((budget) => (
+                                            <option key={budget.id} value={budget.id}>
+                                                {budget.name} - {budget.limit_amount} DT
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div className="col-md-3 d-flex align-items-end">

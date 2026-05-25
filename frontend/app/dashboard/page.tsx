@@ -1,9 +1,11 @@
 "use client";
 
+import Sidebar from "../../components/Sidebar";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getDashboardStats, logoutUser } from "../../services/api";
-
+import { getDashboardStats } from "../../services/api";
+import StatCard from "../../components/Statcard";
 type User = {
   id: number;
   name: string;
@@ -45,37 +47,15 @@ export default function DashboardPage() {
     loadStats();
   }, [router]);
 
-  async function handleLogout() {
-    const token = localStorage.getItem("token");
 
-    if (token) {
-      await logoutUser(token);
-    }
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    router.push("/login");
-  }
 
   return (
     <div className="container-fluid">
       <div className="row">
-        <aside className="col-md-3 col-lg-2 sidebar p-4">
-          <h4 className="mb-4">Budget+</h4>
+        
+        <Sidebar/>
 
-          <a className="sidebar-link" href="/dashboard">Dashboard</a>
-          <a className="sidebar-link" href="/transactions">Transactions</a>
-          <a className="sidebar-link" href="/budgets">Budgets</a>
-          <a className="sidebar-link" href="/categories">Categories</a>
-
-          <button className="btn btn-outline-danger w-100 mt-4" onClick={handleLogout}>
-            Logout
-          </button>
-        </aside>
-
-        <main className="col-md-9 col-lg-10 p-4">
-          <div className="d-flex justify-content-between align-items-center mb-4">
+<main className="col-12 col-md-9 col-lg-10 p-4">          <div className="d-flex justify-content-between align-items-center mb-4">
             <div>
               <h2>Dashboard</h2>
               <p className="text-muted">
@@ -89,31 +69,19 @@ export default function DashboardPage() {
           ) : (
             <div className="row g-4">
               <div className="col-md-3">
-                <div className="stat-card">
-                  <p className="text-muted">Total Income</p>
-                  <h3>{stats.total_income} DT</h3>
-                </div>
+                <StatCard title="Total Income" value={stats.total_income} suffix="DT" />
               </div>
 
               <div className="col-md-3">
-                <div className="stat-card">
-                  <p className="text-muted">Total Expenses</p>
-                  <h3>{stats.total_expense} DT</h3>
-                </div>
+                <StatCard title="Total Expenses" value={stats.total_expense} suffix="DT" />
               </div>
 
               <div className="col-md-3">
-                <div className="stat-card">
-                  <p className="text-muted">Balance</p>
-                  <h3>{stats.balance} DT</h3>
-                </div>
+                <StatCard title="Balance" value={stats.balance} suffix="DT" />
               </div>
 
               <div className="col-md-3">
-                <div className="stat-card">
-                  <p className="text-muted">Budget Used</p>
-                  <h3>{stats.budget_percentage}%</h3>
-                </div>
+                <StatCard title="Budget Used" value={stats.budget_percentage} suffix="%" />
               </div>
             </div>
           )}

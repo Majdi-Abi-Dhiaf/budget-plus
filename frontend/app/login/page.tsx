@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "../../services/api";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,7 +12,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  async function handleLogin(e : any) {
+  async function handleLogin(e: any) {
     e.preventDefault();
 
     const data = await loginUser(email, password);
@@ -62,6 +63,12 @@ export default function LoginPage() {
             Login
           </button>
         </form>
+        <p className="text-center mt-3 mb-0">
+          Don't have an account?{" "}
+          <Link href="/register" className="text-decoration-none">
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   );
