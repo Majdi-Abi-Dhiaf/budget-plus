@@ -157,21 +157,21 @@ export default function TransactionsPage() {
     }
 
     return (
-        <div className="container-fluid">
-            <div className="row">
+        <div className="container-fluid" style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f0f4ff 0%, #f8f1ff 100%)", margin: 0 }}>
+            <div className="row" style={{ margin: 0 }}>
                 <Sidebar />
 
-                <main className="col-md-9 col-lg-10 p-4">
-                    <div className="mb-4">
-                        <h2>Transactions</h2>
+                <main className="col-md-9 col-lg-10" style={{ padding: "40px" }}>
+                    <div style={{ marginBottom: "32px", paddingBottom: "24px", borderBottom: "2px solid rgba(99, 102, 241, 0.1)" }}>
+                        <h2 style={{ marginBottom: "8px" }}>💳 Transactions</h2>
                         <p className="text-muted">
                             Add, view, and delete your income and expenses.
                         </p>
                     </div>
 
                     {message && (
-                        <div className="alert alert-info" role="alert">
-                            {message}
+                        <div className="alert alert-info" role="alert" style={{ marginBottom: "24px" }}>
+                            ✓ {message}
                         </div>
                     )}
 
