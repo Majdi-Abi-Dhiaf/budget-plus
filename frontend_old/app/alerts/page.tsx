@@ -50,13 +50,13 @@ export default function AlertsPage() {
   }, [router]);
 
   return (
-    <div className="container-fluid" style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f0f4ff 0%, #f8f1ff 100%)", margin: 0 }}>
-      <div className="row" style={{ margin: 0 }}>
-        <Sidebar />
+    <div className="container-fluid">
+      <div className="row">
+       <Sidebar />
 
-        <main className="col-md-9 col-lg-10" style={{ padding: "40px" }}>
-          <div style={{ marginBottom: "32px", paddingBottom: "24px", borderBottom: "2px solid rgba(99, 102, 241, 0.1)" }}>
-            <h2 style={{ marginBottom: "8px" }}>🔔 Alerts</h2>
+        <main className="col-md-9 col-lg-10 p-4">
+          <div className="mb-4">
+            <h2>Alerts</h2>
             <p className="text-muted">
               View budget exceeded alerts and important financial notifications.
             </p>
@@ -67,7 +67,7 @@ export default function AlertsPage() {
 
             {alerts.length === 0 ? (
               <div className="alert alert-success">
-                ✓ No alerts found. Your budgets are under control!
+                No alerts found. Your budgets are under control.
               </div>
             ) : (
               <div className="table-responsive">

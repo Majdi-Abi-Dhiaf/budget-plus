@@ -50,41 +50,70 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        
-        <Sidebar/>
+    <div className="container-fluid" style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f0f4ff 0%, #f8f1ff 100%)" }}>
+      <div className="row" style={{ margin: 0 }}>
+        <Sidebar />
 
-<main className="col-12 col-md-9 col-lg-10 p-4">          <div className="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h2>Dashboard</h2>
-              <p className="text-muted">
-                Welcome back, {user?.name}. Here is your financial overview.
-              </p>
-            </div>
+        <main className="col-12 col-md-9 col-lg-10" style={{ padding: "40px" }}>
+          <div style={{ marginBottom: "48px", paddingBottom: "24px", borderBottom: "2px solid rgba(99, 102, 241, 0.1)" }}>
+            <h2 style={{ marginBottom: "8px" }}>📈 Dashboard</h2>
+            <p className="text-muted" style={{ fontSize: "1rem", marginBottom: 0 }}>
+              Welcome back, <strong>{user?.name}</strong>. Here is your financial overview.
+            </p>
           </div>
 
           {!stats ? (
-            <p>Loading...</p>
+            <div style={{ textAlign: "center", padding: "60px 20px" }}>
+              <div style={{ animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}>
+                <p style={{ fontSize: "1.1rem", color: "var(--neutral-500)" }}>⏳ Loading your financial data...</p>
+              </div>
+            </div>
           ) : (
             <div className="row g-4">
-              <div className="col-md-3">
-                <StatCard title="Total Income" value={stats.total_income} suffix="DT" />
+              <div className="col-lg-3 col-md-6">
+                <StatCard 
+                  title="Total Income" 
+                  value={stats.total_income} 
+                  suffix="DT"
+                  icon="📈"
+                />
               </div>
 
-              <div className="col-md-3">
-                <StatCard title="Total Expenses" value={stats.total_expense} suffix="DT" />
+              <div className="col-lg-3 col-md-6">
+                <StatCard 
+                  title="Total Expenses" 
+                  value={stats.total_expense} 
+                  suffix="DT"
+                  icon="💸"
+                />
               </div>
 
-              <div className="col-md-3">
-                <StatCard title="Balance" value={stats.balance} suffix="DT" />
+              <div className="col-lg-3 col-md-6">
+                <StatCard 
+                  title="Balance" 
+                  value={stats.balance} 
+                  suffix="DT"
+                  icon="💎"
+                />
               </div>
 
-              <div className="col-md-3">
-                <StatCard title="Budget Used" value={stats.budget_percentage} suffix="%" />
+              <div className="col-lg-3 col-md-6">
+                <StatCard 
+                  title="Budget Used" 
+                  value={stats.budget_percentage} 
+                  suffix="%"
+                  icon="📊"
+                />
               </div>
             </div>
           )}
+
+          <style>{`
+            @keyframes pulse {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.5; }
+            }
+          `}</style>
         </main>
       </div>
     </div>
